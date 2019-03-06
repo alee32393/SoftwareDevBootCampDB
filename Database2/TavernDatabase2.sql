@@ -71,7 +71,7 @@ Creates the following tables:
 	**Not all Primary Keys and Foreign Keys are defined here, others defined at ALTER TABLES (as noted)**
 */
 
-CREATE TABLE TavernInfo (															--"TavernInfo", Primary Key (TavernID), main table, no dependencies
+CREATE TABLE TavernInfo (									--"TavernInfo", Primary Key (TavernID), main table, no dependencies
 	TavernID SMALLINT CONSTRAINT [PK_TavernInfo] PRIMARY KEY IDENTITY(1, 1),
 	TavernName VARCHAR(50) NOT NULL,
 	TavernLocation VARCHAR(100) NOT NULL,
@@ -79,14 +79,14 @@ CREATE TABLE TavernInfo (															--"TavernInfo", Primary Key (TavernID), 
 	TavernOwner VARCHAR(50) NOT NULL
 );
 
-CREATE TABLE EmployeeInfo (															--"EmployeeInfo", Primary Key (EmployeeID), dependent on "TavernInfo" Foreign Key (TavernID), dependent on "EmployeeRole" Foreign Key (RoleID) **defined at ALTER TABLES**  
+CREATE TABLE EmployeeInfo (									--"EmployeeInfo", Primary Key (EmployeeID), dependent on "TavernInfo" Foreign Key (TavernID), dependent on "EmployeeRole" Foreign Key (RoleID) **defined at ALTER TABLES**  
 	EmployeeID SMALLINT CONSTRAINT [PK_EmployeeInfo] PRIMARY KEY IDENTITY(1, 1),
 	EmployeeName VARCHAR(50) NOT NULL,
 	TavernID SMALLINT CONSTRAINT [FK_EmployeeInfo_TavernInfo] FOREIGN KEY REFERENCES TavernInfo(TavernID),
 	RoleID SMALLINT NOT NULL
 );
 
-CREATE TABLE EmployeeRole (															--"EmployeeRole", Primary Key (RoleID) **defined at ALTER TABLES**, no dependencies
+CREATE TABLE EmployeeRole (									--"EmployeeRole", Primary Key (RoleID) **defined at ALTER TABLES**, no dependencies
 	RoleID SMALLINT NOT NULL IDENTITY(1, 1),
 	RoleName VARCHAR(50) NOT NULL,
 	RoleDescription VARCHAR(500) NOT NULL
@@ -99,7 +99,7 @@ CREATE TABLE SupplyStorage (
 	SupplyCount INT NULL DEFAULT 0
 );
 
-CREATE TABLE SupplyReceived (														--"SupplyReceived", Primary Key (InvoiceID) **defined at ALTER TABLES**, dependent on "SupplyStorage" Foreign Key (SupplyID) **defined at ALTER TABLES**, dependent on "TavernInfo" Foreign Key (TavernID) **defined at ALTER TABLES**
+CREATE TABLE SupplyReceived (									--"SupplyReceived", Primary Key (InvoiceID) **defined at ALTER TABLES**, dependent on "SupplyStorage" Foreign Key (SupplyID) **defined at ALTER TABLES**, dependent on "TavernInfo" Foreign Key (TavernID) **defined at ALTER TABLES**
 	InvoiceID SMALLINT NOT NULL IDENTITY(1, 1),
 	SupplyCost SMALLMONEY NULL DEFAULT 0.00,
 	AmountReceived INT NOT NULL,
@@ -108,34 +108,34 @@ CREATE TABLE SupplyReceived (														--"SupplyReceived", Primary Key (Invo
 	TavernID SMALLINT NOT NULL
 );
 
-CREATE TABLE TavernServices (														--"TavernServices", Primary Key (ServiceID), dependent on "TavernInfo" Foreign Key (TavernID)
+CREATE TABLE TavernServices (									--"TavernServices", Primary Key (ServiceID), dependent on "TavernInfo" Foreign Key (TavernID)
 	ServiceID SMALLINT CONSTRAINT [PK_TavernServices] PRIMARY KEY IDENTITY(1, 1),
 	ServiceName VARCHAR(50) NOT NULL,
 	TavernID SMALLINT CONSTRAINT [FK_TavernServices_TavernInfo] FOREIGN KEY REFERENCES TavernInfo(TavernID)
 );
 
-CREATE TABLE TavernServiceStatus (													--"TavernServiceStatus", Primary Key (StatusID), dependent on "TavernServices" Foreign Key (ServiceID)
+CREATE TABLE TavernServiceStatus (								--"TavernServiceStatus", Primary Key (StatusID), dependent on "TavernServices" Foreign Key (ServiceID)
 	StatusID SMALLINT CONSTRAINT [PK_TavernServiceStatus] PRIMARY KEY IDENTITY(1, 1),
 	StatusOfService VARCHAR(50) NOT NULL,
 	ServiceID SMALLINT CONSTRAINT [FK_TavernServiceStatus_TavernServices] FOREIGN KEY REFERENCES TavernServices(ServiceID)
 );
 
-CREATE TABLE GuestStatus (															--"GuestStatus", Primary Key (GuestStatusID), no dependencies
+CREATE TABLE GuestStatus (									--"GuestStatus", Primary Key (GuestStatusID), no dependencies
 	GuestStatusID SMALLINT CONSTRAINT [PK_GuestStatus] PRIMARY KEY IDENTITY(1, 1),
 	GuestStatus VARCHAR(50) NOT NULL
 );
 
-CREATE TABLE GuestLevel (															--"GuestLevel", Primary Key (GuestLevelID), no dependencies
+CREATE TABLE GuestLevel (									--"GuestLevel", Primary Key (GuestLevelID), no dependencies
 	GuestLevelID SMALLINT CONSTRAINT [PK_GuestLevel] PRIMARY KEY IDENTITY(1, 1),
 	GuestLevel INT NOT NULL
 );
 
-CREATE TABLE GuestClass (															--"GuestClass", Primary Key (GuestClassID), no dependencies
+CREATE TABLE GuestClass (									--"GuestClass", Primary Key (GuestClassID), no dependencies
 	GuestClassID SMALLINT CONSTRAINT [PK_GuestClass] PRIMARY KEY IDENTITY(1, 1),
 	GuestClass VARCHAR(50) NOT NULL
 );
 
-CREATE TABLE TavernGuests (															--"TavernGuests", Primary Key (GuestID), dependent on "GuestStatus" Foreign Key (GuestStatusID), dependent on "GuestLevel" Foreign Key (GuestLevelID), dependent on "GuestClass" Foreign Key (GuestClassID)
+CREATE TABLE TavernGuests (									--"TavernGuests", Primary Key (GuestID), dependent on "GuestStatus" Foreign Key (GuestStatusID), dependent on "GuestLevel" Foreign Key (GuestLevelID), dependent on "GuestClass" Foreign Key (GuestClassID)
 	GuestID SMALLINT CONSTRAINT [PK_TavernGuests] PRIMARY KEY IDENTITY(1, 1),
 	GuestName VARCHAR(50) NOT NULL,
 	GuestNotes VARCHAR(100) NULL DEFAULT 'No notes about this guest',
@@ -146,7 +146,7 @@ CREATE TABLE TavernGuests (															--"TavernGuests", Primary Key (GuestID
 	GuestClassID SMALLINT CONSTRAINT [FK_TavernGuests_GuestClass] FOREIGN KEY REFERENCES GuestClass(GuestClassID)
 );
 
-CREATE TABLE TavernSales (															--"TavernSales", Primary Key (SalesID) **defined at ALTER TABLES**, dependent on "TavernGuests" Foreign Key (GuestID) **defined at ALTER TABLES**, dependent on "TavernInfo" Foreign Key (TavernID) **defined at ALTER TABLES**
+CREATE TABLE TavernSales (									--"TavernSales", Primary Key (SalesID) **defined at ALTER TABLES**, dependent on "TavernGuests" Foreign Key (GuestID) **defined at ALTER TABLES**, dependent on "TavernInfo" Foreign Key (TavernID) **defined at ALTER TABLES**
 	SalesID SMALLINT NOT NULL IDENTITY(1, 1),
 	TypeOfService VARCHAR(50) NOT NULL,
 	PriceOfService SMALLMONEY NOT NULL DEFAULT 0.00,
@@ -262,7 +262,7 @@ VALUES
 ('Blackjack', 6),
 ('Arm Wrestling', 7);
 
-INSERT INTO TavernServiceStatus			--"TavernServiceStatus" Attributes: (StatusID (SMALLINT AUTO PK), StatusOfService (VARCHAR(50)), ServiceID (SMALLINT FK))
+INSERT INTO TavernServiceStatus				--"TavernServiceStatus" Attributes: (StatusID (SMALLINT AUTO PK), StatusOfService (VARCHAR(50)), ServiceID (SMALLINT FK))
 VALUES
 ('Active', 1),
 ('Inactive', 2),
