@@ -1,5 +1,5 @@
 /*
-									"DisplayTableQueryData.sql"
+					"DisplayTableQueryData.sql"
 		
 		3/7/2019 - In class lab
 		Created for: "Software Dev Bootcamp - DB Class #3 - in class lab" Miles Technologies
