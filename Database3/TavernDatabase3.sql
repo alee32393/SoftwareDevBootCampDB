@@ -62,12 +62,12 @@ SupplyReceived, SupplyStorage, TavernGuests, TavernInfo, TavernLocation, TavernS
 Defines all CONSTRAINTS (PRIMARY KEYS, FOREIGN KEYS, UNIQUE, DEFAULT)
 */
 
-CREATE TABLE TavernLocation (												--"TavernLocation": [PRIMARY KEY (locationId), no dependencies]
+CREATE TABLE TavernLocation (					--"TavernLocation": [PRIMARY KEY (locationId), no dependencies]
 	locationId INT CONSTRAINT [PK_TavernLocation] PRIMARY KEY IDENTITY(1,1),
 	locationName VARCHAR(100) NOT NULL CONSTRAINT [UQ_TavernLocation_locationName] UNIQUE(locationName)
 );
 
-CREATE TABLE TavernInfo (												--"TavernInfo": [PRIMARY KEY (tavernID), dependent on "TavernLocation" FOREIGN KEY (locationId)]						
+CREATE TABLE TavernInfo (					--"TavernInfo": [PRIMARY KEY (tavernID), dependent on "TavernLocation" FOREIGN KEY (locationId)]						
 	tavernId INT CONSTRAINT [PK_TavernInfo] PRIMARY KEY IDENTITY(1,1),
 	tavernName VARCHAR(100) NOT NULL,
 	tavernOwner VARCHAR(100) NOT NULL,
@@ -75,35 +75,35 @@ CREATE TABLE TavernInfo (												--"TavernInfo": [PRIMARY KEY (tavernID), de
 	tavernLocation INT NOT NULL CONSTRAINT [FK_TavernInfo_TavernLocation] FOREIGN KEY (tavernLocation) REFERENCES TavernLocation(locationId)
 );
 
-CREATE TABLE EmployeeRole (												--"EmployeeRole": [PRIMARY KEY (roleId), no dependencies]
+CREATE TABLE EmployeeRole (					--"EmployeeRole": [PRIMARY KEY (roleId), no dependencies]
 	roleId INT CONSTRAINT [PK_EmployeeRole] PRIMARY KEY IDENTITY(1,1),
 	roleName VARCHAR(100) NOT NULL CONSTRAINT [UQ_EmployeeRole_roleName] UNIQUE(roleName),
 	roleDescription VARCHAR(500) NOT NULL
 );
 
-CREATE TABLE EmployeeInfo (												--"EmployeeInfo": [PRIMARY KEY (employeeId), dependent on "EmployeeRole" FOREIGN KEY (roleId), dependent on "TavernInfo" FOREIGN KEY (tavernId)]
+CREATE TABLE EmployeeInfo (					--"EmployeeInfo": [PRIMARY KEY (employeeId), dependent on "EmployeeRole" FOREIGN KEY (roleId), dependent on "TavernInfo" FOREIGN KEY (tavernId)]
 	employeeId INT CONSTRAINT [PK_EmployeeInfo] PRIMARY KEY IDENTITY(1,1),
 	employeeName VARCHAR(100) NOT NULL,
 	employeeRole INT NOT NULL CONSTRAINT [FK_EmployeeInfo_EmployeeRole] FOREIGN KEY (employeeRole) REFERENCES EmployeeRole(roleId),
 	tavernEmployed INT NOT NULL CONSTRAINT [FK_EmployeeInfo_TavernInfo] FOREIGN KEY (tavernEmployed) REFERENCES TavernInfo(tavernId)
 );
 
-CREATE TABLE GuestNotes (												--"GuestNotes": [PRIMARY KEY (noteId), no dependencies]
+CREATE TABLE GuestNotes (					--"GuestNotes": [PRIMARY KEY (noteId), no dependencies]
 	noteId INT CONSTRAINT [PK_GuestNotes] PRIMARY KEY IDENTITY(1,1),
 	note VARCHAR(500) NOT NULL CONSTRAINT [UQ_GuestNotes_note] UNIQUE(note)
 );
 
-CREATE TABLE GuestStatus (												--"GuestStatus": [PRIMARY KEY (guestStatusId), no dependencies]
+CREATE TABLE GuestStatus (					--"GuestStatus": [PRIMARY KEY (guestStatusId), no dependencies]
 	guestStatusId INT CONSTRAINT [PK_GuestStatus] PRIMARY KEY IDENTITY(1,1),
 	guestStatusDescription VARCHAR(50) NOT NULL CONSTRAINT [UQ_GuestStatus_guestStatusDescription] UNIQUE(guestStatusDescription)
 );
 
-CREATE TABLE ClassTypes (												--"ClassTypes": [PRIMARY KEY (classId), no dependencies]
+CREATE TABLE ClassTypes (					--"ClassTypes": [PRIMARY KEY (classId), no dependencies]
 	classId INT CONSTRAINT [PK_ClassTypes] PRIMARY KEY IDENTITY(1,1),
 	className VARCHAR(100) NOT NULL CONSTRAINT [UQ_ClassTypes_className] UNIQUE(className)
 );
 
-CREATE TABLE TavernGuests (												--"TavernGuests": [PRIMARY KEY (guestId), dependent on "GuestNotes" FOREIGN KEY (noteId), dependent on "GuestStatus" FOREIGN KEY (guestStatusId)]
+CREATE TABLE TavernGuests (					--"TavernGuests": [PRIMARY KEY (guestId), dependent on "GuestNotes" FOREIGN KEY (noteId), dependent on "GuestStatus" FOREIGN KEY (guestStatusId)]
 	guestId INT CONSTRAINT [PK_TavernGuests] PRIMARY KEY IDENTITY(1,1),
 	guestName VARCHAR(100) NOT NULL,
 	guestNote INT NULL CONSTRAINT [FK_TavernGuests_GuestNotes] FOREIGN KEY (guestNote) REFERENCES GuestNotes(noteId),
@@ -112,14 +112,14 @@ CREATE TABLE TavernGuests (												--"TavernGuests": [PRIMARY KEY (guestId),
 	guestStatus INT NULL CONSTRAINT [FK_TavernGuests_GuestStatus] FOREIGN KEY (guestStatus) REFERENCES GuestStatus(guestStatusId)
 );
 
-CREATE TABLE GuestClassLevel (												--"GuestClassLevel": [PRIMARY KEY (classLevelId), dependent on "TavernGuests" FORREIGN KEY (guestId), dependent on "ClassTypes" FORREIGN KEY (classId)]
+CREATE TABLE GuestClassLevel (					--"GuestClassLevel": [PRIMARY KEY (classLevelId), dependent on "TavernGuests" FORREIGN KEY (guestId), dependent on "ClassTypes" FORREIGN KEY (classId)]
 	classLevelId INT CONSTRAINT [PK_GuestClassLevel] PRIMARY KEY IDENTITY(1,1),
 	guestId INT NOT NULL CONSTRAINT [FK_GuestClassLevel_TavernGuests] FOREIGN KEY (guestId) REFERENCES TavernGuests(guestId),
 	classId INT NOT NULL CONSTRAINT [FK_GuestClassLevel_ClassTypes] FOREIGN KEY (classId) REFERENCES ClassTypes(classId),
 	guestLevel INT NOT NULL
 );
 
-CREATE TABLE SupplyStorage (												--"SupplyStorage": [PRIMARY KEY (supplyId), no dependencies]
+CREATE TABLE SupplyStorage (					--"SupplyStorage": [PRIMARY KEY (supplyId), no dependencies]
 	supplyId INT CONSTRAINT [PK_SupplyStorage] PRIMARY KEY IDENTITY(1,1),
 	dateOfUpdate DATE NOT NULL,
 	supplyName VARCHAR(50) NOT NULL CONSTRAINT [UQ_SupplyStorage_SsupplyName] UNIQUE(supplyName),
@@ -127,7 +127,7 @@ CREATE TABLE SupplyStorage (												--"SupplyStorage": [PRIMARY KEY (supplyI
 	supplyCount INT NULL CONSTRAINT [DF_SupplyStorage_supplyCount] DEFAULT 0
 );
 
-CREATE TABLE SupplyReceived (												--"SupplyReceived": [PRIMARY KEY (invoiceId), dependent on "TavernInfo" FORREIGN KEY (tavernId), dependent on "SupplyStorage" FORREIGN KEY (supplyId)]
+CREATE TABLE SupplyReceived (					--"SupplyReceived": [PRIMARY KEY (invoiceId), dependent on "TavernInfo" FORREIGN KEY (tavernId), dependent on "SupplyStorage" FORREIGN KEY (supplyId)]
 	invoiceId INT CONSTRAINT [PK_SupplyReceived] PRIMARY KEY IDENTITY(1,1),
 	dateOfPurchase DATE NOT NULL,
 	tavernId INT NOT NULL CONSTRAINT [FK_SupplyReceived_TavernInfo] FOREIGN KEY (tavernId) REFERENCES TavernInfo(tavernId),
@@ -136,24 +136,24 @@ CREATE TABLE SupplyReceived (												--"SupplyReceived": [PRIMARY KEY (invoi
 	amountReceived INT NOT NULL
 );
 
-CREATE TABLE TavernServiceStatus (											--"TavernServiceStatus": [PRIMARY KEY (serviceStatusId), no dependencies]
+CREATE TABLE TavernServiceStatus (				--"TavernServiceStatus": [PRIMARY KEY (serviceStatusId), no dependencies]
 	serviceStatusId INT CONSTRAINT [PK_TavernServiceStatus] PRIMARY KEY IDENTITY(1,1),
 	serviceStatus VARCHAR(50) NOT NULL CONSTRAINT [UQ_TavernServiceStatus_serviceStatus] UNIQUE(serviceStatus)
 );
 
-CREATE TABLE TypesOfSevices (												--"TypesOfSevices": [PRIMARY KEY (serviceNameId), no dependencies]
+CREATE TABLE TypesOfSevices (					--"TypesOfSevices": [PRIMARY KEY (serviceNameId), no dependencies]
 	serviceNameId INT CONSTRAINT [PK_serviceNameId] PRIMARY KEY IDENTITY(1,1),
 	serviceName VARCHAR(100) NOT NULL CONSTRAINT [UQ_TypesOfSevices_serviceName] UNIQUE(serviceName)
 );
 
-CREATE TABLE TavernServices (												--"TavernServices": [PRIMARY KEY (serviceId), dependent on "TypesOfSevices" FORREIGN KEY (serviceNameId), dependent on "TavernServiceStatus" FORREIGN KEY (serviceStatusId), dependent on "TavernInfo" FORREIGN KEY (tavernId)]
+CREATE TABLE TavernServices (					--"TavernServices": [PRIMARY KEY (serviceId), dependent on "TypesOfSevices" FORREIGN KEY (serviceNameId), dependent on "TavernServiceStatus" FORREIGN KEY (serviceStatusId), dependent on "TavernInfo" FORREIGN KEY (tavernId)]
 	serviceId INT CONSTRAINT [PK_TavernServices] PRIMARY KEY IDENTITY(1,1),
 	serviceNameId INT NOT NULL CONSTRAINT [FK_TavernServices_TypesOfSevices] FOREIGN KEY (serviceNameId) REFERENCES TypesOfSevices(serviceNameId),
 	serviceStatus INT NOT NULL CONSTRAINT [FK_TavernServices_TavernServiceStatus] FOREIGN KEY (serviceStatus) REFERENCES TavernServiceStatus(serviceStatusId),
 	tavernId INT NOT NULL CONSTRAINT [FK_TavernServices_TavernInfo] FOREIGN KEY (tavernId) REFERENCES TavernInfo(tavernId)
 );
 
-CREATE TABLE TavernSales (												--"TavernSales": [PRIMARY KEY (saleId), dependent on "TavernInfo" FORREIGN KEY (tavernId), dependent on "TavernGuests" FORREIGN KEY (guestId), dependent on "TypesOfSevices" FORREIGN KEY (serviceNameId)]
+CREATE TABLE TavernSales (					--"TavernSales": [PRIMARY KEY (saleId), dependent on "TavernInfo" FORREIGN KEY (tavernId), dependent on "TavernGuests" FORREIGN KEY (guestId), dependent on "TypesOfSevices" FORREIGN KEY (serviceNameId)]
 	saleId INT CONSTRAINT [PK_TavernSales] PRIMARY KEY IDENTITY(1,1),
 	datePurchased DATE NOT NULL,
 	tavernId INT NOT NULL CONSTRAINT [FK_TavernSales_TavernInfo] FOREIGN KEY (tavernId) REFERENCES TavernInfo(tavernId),
@@ -168,19 +168,19 @@ CREATE TABLE TavernSales (												--"TavernSales": [PRIMARY KEY (saleId), de
 There should be a way to track Room Stays which will contain a sale, guest, room, date it was stayed in and the rate.
 */
 
-CREATE TABLE InnRoomStatus (												--"InnRoomStatus": [PRIMARY KEY (roomStatusId), no dependencies]
+CREATE TABLE InnRoomStatus (					--"InnRoomStatus": [PRIMARY KEY (roomStatusId), no dependencies]
 	roomStatusId INT CONSTRAINT [PK_InnRoomStatus] PRIMARY KEY IDENTITY(1,1),
 	roomStatus VARCHAR(100) NOT NULL CONSTRAINT [UQ_InnRoomStatus_roomStatus] UNIQUE(roomStatus)
 );
 
-CREATE TABLE InnRooms (													--"InnRooms": [PRIMARY KEY (roomId), dependent on "InnRoomStatus" FORREIGN KEY (roomStatusId), dependent on "TavernInfo" FORREIGN KEY (tavernId)]
+CREATE TABLE InnRooms (						--"InnRooms": [PRIMARY KEY (roomId), dependent on "InnRoomStatus" FORREIGN KEY (roomStatusId), dependent on "TavernInfo" FORREIGN KEY (tavernId)]
 	roomId INT CONSTRAINT [PK_InnRooms] PRIMARY KEY IDENTITY(1,1),
 	roomCost INT NOT NULL, --paid in gold
 	roomStatusId INT NOT NULL CONSTRAINT [FK_InnRooms_InnRoomStatus] FOREIGN KEY (roomStatusId) REFERENCES InnRoomStatus(roomStatusId),
 	tavernId INT NOT NULL CONSTRAINT [FK_InnRooms_TavernInfo] FOREIGN KEY (tavernId) REFERENCES TavernInfo(tavernId)
 );
 
-CREATE TABLE RoomSales (												--"RoomSales": [PRIMARY KEY (roomSaleId), dependent on "InnRooms" FORREIGN KEY (roomId), dependent on "TavernGuests" FORREIGN KEY (guestId)]
+CREATE TABLE RoomSales (					--"RoomSales": [PRIMARY KEY (roomSaleId), dependent on "InnRooms" FORREIGN KEY (roomId), dependent on "TavernGuests" FORREIGN KEY (guestId)]
 	roomSaleId INT CONSTRAINT [PK_RoomSales] PRIMARY KEY IDENTITY(1,1),
 	dateOfStay DATE NOT NULL,
 	roomId INT NOT NULL CONSTRAINT [FK_RoomSales_InnRooms] FOREIGN KEY (roomId) REFERENCES InnRooms(roomId),
