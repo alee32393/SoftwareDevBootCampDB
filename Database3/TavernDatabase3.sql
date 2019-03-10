@@ -534,8 +534,10 @@ GO
 SELECT statements (See our lab in class - The INSERT commands should be generated). Its ok if the data doesnt 
 match or make sense! :) Remember, INSERT Commands look like: INSERT INTO Table1 (column1, column2) VALUES (column1, column2)
 */
-	--Attempt 1 at problem #9, information successfully inserted into another table, INSERTIONS WERE NOT GENERATED
 
+	--Attempt 1 at problem #9: information successfully inserted into another table, INSERTIONS WERE NOT GENERATED
+
+/*
 INSERT INTO TypesOfSevices (serviceName)
 SELECT className FROM ClassTypes;
 INSERT INTO TypesOfSevices (serviceName)
@@ -543,13 +545,22 @@ SELECT employeeName FROM EmployeeInfo;
 
 SELECT * FROM TypesOfSevices;
 GO
-	
-	--Attempt 2 at problem #9, made attempt to generate the insertions, attempt was unsuccessful, need further assistance
+*/
+
+	--Attempt 2 at problem #9: made attempt to generate the insertions, attempt was unsuccessful, need further assistance
 /*
 SELECT CONCAT('INSERT INTO ', SELECT TABLE_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE COLUMN_NAME='serviceName' 
 (SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE COLUMN_NAME='serviceName'), 'VALUES ', 
 SELECT className FROM ClassTypes));
 GO
 */
+
+	--Attempt 3 at problem #9: created generated INSERT INTO statements, but I do not know how to use them to actually insert the data into the table. Additionally cannot insert quote mark at the end.
+
+SELECT 'INSERT INTO ' + 'TypesOfSevices' + '(' + 'serviceName' + ')' + ' VALUES ' + '''' + className FROM ClassTypes
+UNION
+SELECT 'INSERT INTO ' + 'TypesOfSevices' + '(' + 'serviceName' + ')' + ' VALUES ' + '''' + employeeName FROM EmployeeInfo
+UNION
+SELECT 'INSERT INTO ' + 'TypesOfSevices' + '(' + 'serviceName' + ')' + ' VALUES ' + '''' + supplyName FROM SupplyStorage
 
 --END OF FILE
