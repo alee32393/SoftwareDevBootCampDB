@@ -62,7 +62,7 @@ SupplyReceived, SupplyStorage, TavernGuests, TavernInfo, TavernLocation, TavernS
 Defines all CONSTRAINTS (PRIMARY KEYS, FOREIGN KEYS, UNIQUE, DEFAULT)
 */
 
-CREATE TABLE TavernLocation (				--"TavernLocation": [PRIMARY KEY (locationId), no dependencies]
+CREATE TABLE TavernLocation (					--"TavernLocation": [PRIMARY KEY (locationId), no dependencies]
 	locationId INT CONSTRAINT [PK_TavernLocation] PRIMARY KEY IDENTITY(1,1),
 	locationName VARCHAR(100) NOT NULL CONSTRAINT [UQ_TavernLocation_locationName] UNIQUE(locationName)
 );
@@ -112,14 +112,14 @@ CREATE TABLE TavernGuests (					--"TavernGuests": [PRIMARY KEY (guestId), depend
 	guestStatus INT NULL CONSTRAINT [FK_TavernGuests_GuestStatus] FOREIGN KEY (guestStatus) REFERENCES GuestStatus(guestStatusId)
 );
 
-CREATE TABLE GuestClassLevel (				--"GuestClassLevel": [PRIMARY KEY (classLevelId), dependent on "TavernGuests" FORREIGN KEY (guestId), dependent on "ClassTypes" FORREIGN KEY (classId)]
+CREATE TABLE GuestClassLevel (					--"GuestClassLevel": [PRIMARY KEY (classLevelId), dependent on "TavernGuests" FORREIGN KEY (guestId), dependent on "ClassTypes" FORREIGN KEY (classId)]
 	classLevelId INT CONSTRAINT [PK_GuestClassLevel] PRIMARY KEY IDENTITY(1,1),
 	guestId INT NOT NULL CONSTRAINT [FK_GuestClassLevel_TavernGuests] FOREIGN KEY (guestId) REFERENCES TavernGuests(guestId),
 	classId INT NOT NULL CONSTRAINT [FK_GuestClassLevel_ClassTypes] FOREIGN KEY (classId) REFERENCES ClassTypes(classId),
 	guestLevel INT NOT NULL
 );
 
-CREATE TABLE SupplyStorage (				--"SupplyStorage": [PRIMARY KEY (supplyId), no dependencies]
+CREATE TABLE SupplyStorage (					--"SupplyStorage": [PRIMARY KEY (supplyId), no dependencies]
 	supplyId INT CONSTRAINT [PK_SupplyStorage] PRIMARY KEY IDENTITY(1,1),
 	dateOfUpdate DATE NOT NULL,
 	supplyName VARCHAR(50) NOT NULL CONSTRAINT [UQ_SupplyStorage_SsupplyName] UNIQUE(supplyName),
@@ -127,7 +127,7 @@ CREATE TABLE SupplyStorage (				--"SupplyStorage": [PRIMARY KEY (supplyId), no d
 	supplyCount INT NULL CONSTRAINT [DF_SupplyStorage_supplyCount] DEFAULT 0
 );
 
-CREATE TABLE SupplyReceived (				--"SupplyReceived": [PRIMARY KEY (invoiceId), dependent on "TavernInfo" FORREIGN KEY (tavernId), dependent on "SupplyStorage" FORREIGN KEY (supplyId)]
+CREATE TABLE SupplyReceived (					--"SupplyReceived": [PRIMARY KEY (invoiceId), dependent on "TavernInfo" FORREIGN KEY (tavernId), dependent on "SupplyStorage" FORREIGN KEY (supplyId)]
 	invoiceId INT CONSTRAINT [PK_SupplyReceived] PRIMARY KEY IDENTITY(1,1),
 	dateOfPurchase DATE NOT NULL,
 	tavernId INT NOT NULL CONSTRAINT [FK_SupplyReceived_TavernInfo] FOREIGN KEY (tavernId) REFERENCES TavernInfo(tavernId),
@@ -136,17 +136,17 @@ CREATE TABLE SupplyReceived (				--"SupplyReceived": [PRIMARY KEY (invoiceId), d
 	amountReceived INT NOT NULL
 );
 
-CREATE TABLE TavernServiceStatus (			--"TavernServiceStatus": [PRIMARY KEY (serviceStatusId), no dependencies]
+CREATE TABLE TavernServiceStatus (				--"TavernServiceStatus": [PRIMARY KEY (serviceStatusId), no dependencies]
 	serviceStatusId INT CONSTRAINT [PK_TavernServiceStatus] PRIMARY KEY IDENTITY(1,1),
 	serviceStatus VARCHAR(50) NOT NULL CONSTRAINT [UQ_TavernServiceStatus_serviceStatus] UNIQUE(serviceStatus)
 );
 
-CREATE TABLE TypesOfSevices (				--"TypesOfSevices": [PRIMARY KEY (serviceNameId), no dependencies]
+CREATE TABLE TypesOfSevices (					--"TypesOfSevices": [PRIMARY KEY (serviceNameId), no dependencies]
 	serviceNameId INT CONSTRAINT [PK_serviceNameId] PRIMARY KEY IDENTITY(1,1),
 	serviceName VARCHAR(100) NOT NULL CONSTRAINT [UQ_TypesOfSevices_serviceName] UNIQUE(serviceName)
 );
 
-CREATE TABLE TavernServices (				--"TavernServices": [PRIMARY KEY (serviceId), dependent on "TypesOfSevices" FORREIGN KEY (serviceNameId), dependent on "TavernServiceStatus" FORREIGN KEY (serviceStatusId), dependent on "TavernInfo" FORREIGN KEY (tavernId)]
+CREATE TABLE TavernServices (					--"TavernServices": [PRIMARY KEY (serviceId), dependent on "TypesOfSevices" FORREIGN KEY (serviceNameId), dependent on "TavernServiceStatus" FORREIGN KEY (serviceStatusId), dependent on "TavernInfo" FORREIGN KEY (tavernId)]
 	serviceId INT CONSTRAINT [PK_TavernServices] PRIMARY KEY IDENTITY(1,1),
 	serviceNameId INT NOT NULL CONSTRAINT [FK_TavernServices_TypesOfSevices] FOREIGN KEY (serviceNameId) REFERENCES TypesOfSevices(serviceNameId),
 	serviceStatus INT NOT NULL CONSTRAINT [FK_TavernServices_TavernServiceStatus] FOREIGN KEY (serviceStatus) REFERENCES TavernServiceStatus(serviceStatusId),
@@ -164,7 +164,7 @@ CREATE TABLE TavernSales (					--"TavernSales": [PRIMARY KEY (saleId), dependent
 );
 
 
-CREATE TABLE InnRoomStatus (				--"InnRoomStatus": [PRIMARY KEY (roomStatusId), no dependencies]
+CREATE TABLE InnRoomStatus (					--"InnRoomStatus": [PRIMARY KEY (roomStatusId), no dependencies]
 	roomStatusId INT CONSTRAINT [PK_InnRoomStatus] PRIMARY KEY IDENTITY(1,1),
 	roomStatus VARCHAR(100) NOT NULL CONSTRAINT [UQ_InnRoomStatus_roomStatus] UNIQUE(roomStatus)
 );
@@ -334,7 +334,7 @@ VALUES
 ('2018-06-11', 7, 1, 50.00, 100),
 ('2018-06-11', 8, 1, 50.00, 100);
 
-INSERT INTO TavernServiceStatus				--"TavernServiceStatus" Attributes: [serviceStatusId (INT AUTO PK), serviceStatus (VARCHAR)]
+INSERT INTO TavernServiceStatus					--"TavernServiceStatus" Attributes: [serviceStatusId (INT AUTO PK), serviceStatus (VARCHAR)]
 VALUES
 ('Active'),
 ('Inactive');
